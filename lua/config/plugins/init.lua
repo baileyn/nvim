@@ -224,6 +224,7 @@ local function init()
 	use({ "tpope/vim-fugitive" })
 	use({ "tpope/vim-speeddating" })
 	use({ "tpope/vim-vinegar" })
+	use({ "tpope/vim-abolish" })
 
 	-- Status Line for Neovim
 	use({
