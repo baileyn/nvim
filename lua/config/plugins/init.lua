@@ -126,7 +126,6 @@ local function init()
 
 	use({
 		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
 		config = function()
 			require("config.plugins.cmp").setup()
 		end,
@@ -134,20 +133,13 @@ local function init()
 	use({ "hrsh7th/cmp-nvim-lua", after = "nvim-cmp" })
 	use({ "hrsh7th/cmp-nvim-lsp", after = "cmp-nvim-lua" })
 	use({ "hrsh7th/cmp-buffer", after = "cmp-nvim-lsp" })
+    use({ 'hrsh7th/cmp-cmdline', after = 'nvim-cmp' })
 	use({ "hrsh7th/cmp-path", after = "cmp-buffer" })
 	use({ "hrsh7th/cmp-calc", after = "cmp-path" })
-	use({ "L3MON4D3/LuaSnip" })
-	use({ "saadparwaiz1/cmp_luasnip" })
-
-	use({
-		"David-Kunz/cmp-npm",
-		after = "cmp-calc",
-		requires = "nvim-lua/plenary.nvim",
-		config = function()
-			require("config.plugins.cmp-npm").setup()
-		end,
-	})
 	use({ "onsails/lspkind-nvim" })
+
+	use({ "saadparwaiz1/cmp_luasnip" })
+	use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" }, after = "cmp_luasnip" })
 
 	-- Add components to show LSP Status in Status Line
 	use({ "jose-elias-alvarez/nvim-lsp-ts-utils", after = { "nvim-treesitter" } })

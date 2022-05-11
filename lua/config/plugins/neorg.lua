@@ -6,6 +6,11 @@ require("neorg").setup({
 				zen_mode = "zen-mode",
 			},
 		},
+		["core.norg.completion"] = {
+			config = {
+				engine = "nvim-cmp",
+			},
+		},
 		["core.norg.concealer"] = {},
 		["core.norg.dirman"] = {
 			config = {
