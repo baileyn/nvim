@@ -137,6 +137,7 @@ local function init()
 	-- tpope is our savior.
 	use({ "tpope/vim-fugitive" })
 	use({ "tpope/vim-speeddating" })
+    use({"tpope/vim-vinegar"})
 
 	-- Status Line for Neovim
 	use({
