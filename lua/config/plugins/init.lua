@@ -178,7 +178,21 @@ local function init()
 		"simrat39/rust-tools.nvim",
 		requires = "neovim/nvim-lspconfig",
 	})
-	use({ "mfussenegger/nvim-dap", requires = "nvim-lua/plenary.nvim" })
+	use({
+		"mfussenegger/nvim-dap",
+		requires = "nvim-lua/plenary.nvim",
+		config = function()
+			local dap = require("dap")
+			dap.adapters.cppvsdbg = {
+				id = "cppvsdbg",
+				type = "executable",
+				command = "C:\\debugAdapters\\bin\\OpenDebugAD7.exe",
+				options = {
+					detached = false,
+				},
+			}
+		end,
+	})
 
 	use({ "hrsh7th/cmp-nvim-lsp-signature-help", after = "nvim-cmp" })
 	use({ "hrsh7th/cmp-nvim-lua", after = "nvim-cmp" })

@@ -56,7 +56,7 @@ local on_attach = function(client, bufnr)
 	--     },
 	-- }
 	--
-	if client.resolved_capabilities.document_highlight then
+	if client.server_capabilities.document_highlight then
 		vim.cmd([[
             augroup lsp_document_highlight
             autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
