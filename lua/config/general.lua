@@ -3,6 +3,7 @@ vim.opt.termguicolors = true
 vim.opt.autoindent = true
 vim.opt.expandtab = true
 vim.opt.smarttab = true
+vim.opt.updatetime = 300
 vim.g.mapleader = ' '
 vim.g.netrw_altfile = 1
 

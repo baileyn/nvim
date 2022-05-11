@@ -49,9 +49,29 @@ local function init()
 		"nvim-treesitter/nvim-treesitter",
 		run = ":TSUpdate",
 		config = function()
+			local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+
+			-- These two are optional and provide syntax highlighting
+			-- for Neorg tables and the @document.meta tag
+			parser_configs.norg_meta = {
+				install_info = {
+					url = "https://github.com/nvim-neorg/tree-sitter-norg-meta",
+					files = { "src/parser.c" },
+					branch = "main",
+				},
+			}
+
+			parser_configs.norg_table = {
+				install_info = {
+					url = "https://github.com/nvim-neorg/tree-sitter-norg-table",
+					files = { "src/parser.c" },
+					branch = "main",
+				},
+			}
+
 			require("nvim-treesitter.configs").setup({
 				-- One of "all", "maintained" (parsers with maintainers), or a list of languages
-				ensure_installed = { "rust", "go", "java", "yaml", "json", "hcl", "norg" },
+				ensure_installed = { "rust", "go", "java", "yaml", "json", "hcl", "norg", "norg_meta", "norg_table" },
 
 				-- Install languages synchronously (only applied to `ensure_installed`)
 				sync_install = false,
@@ -130,7 +150,6 @@ local function init()
 	use({ "onsails/lspkind-nvim" })
 
 	-- Add components to show LSP Status in Status Line
-	use("nvim-lua/lsp-status.nvim")
 	use({ "jose-elias-alvarez/nvim-lsp-ts-utils", after = { "nvim-treesitter" } })
 
 	use({
@@ -174,6 +193,12 @@ local function init()
 	use({ "rcarriga/nvim-notify" })
 	use({ "folke/which-key.nvim", config = "require('config.plugins.whichkey')" })
 	use({
+		"folke/zen-mode.nvim",
+		config = function()
+			require("zen-mode").setup()
+		end,
+	})
+	use({
 		"SmiteshP/nvim-gps",
 		requires = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
@@ -198,6 +223,19 @@ local function init()
 		requires = { "nvim-lua/plenary.nvim" },
 		after = { "nvim-treesitter", "telescope.nvim" },
 		config = "require('config.plugins.neorg')",
+	})
+
+	use({
+		"j-hui/fidget.nvim",
+		config = function()
+			require("fidget").setup({
+				text = {
+					spinner = "moon",
+				},
+				align = { bottom = true },
+				window = { relative = "editor" },
+			})
+		end,
 	})
 end
 

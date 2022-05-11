@@ -1,6 +1,4 @@
 local lsp_installer = require("nvim-lsp-installer")
-local lsp_status = require("lsp-status")
-lsp_status.register_progress()
 
 local on_attach = function(client, bufnr)
 	require("which-key").register({
@@ -57,7 +55,16 @@ local on_attach = function(client, bufnr)
 	--         { 'ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>' },
 	--     },
 	-- }
-	lsp_status.on_attach(client, bufnr)
+	--
+	if client.resolved_capabilities.document_highlight then
+		vim.cmd([[
+        augroup lsp_document_highlight
+        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+        autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+        augroup end
+        ]])
+	end
 end
 
 lsp_installer.on_server_ready(function(server)
