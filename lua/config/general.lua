@@ -21,14 +21,20 @@ vim.o.shiftwidth = 0
 vim.wo.number = true
 vim.wo.relativenumber = true
 
-vim.api.nvim_exec(
-	[[
-filetype plugin indent on
-augroup custom_commands
-    autocmd!
-    autocmd InsertEnter * :set norelativenumber
-    autocmd InsertLeave * :set relativenumber
-augroup end
-]],
-	true
-)
+vim.api.nvim_create_augroup("line_numbers", {})
+vim.api.nvim_create_autocmd("InsertEnter", {
+group = "line_numbers",
+command = ":set norelativenumber",
+})
+vim.api.nvim_create_autocmd("InsertLeave", {
+group = "line_numbers",
+command = ":set relativenumber",
+})
+
+vim.api.nvim_create_augroup("formatting", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+group = "formatting",
+callback = function()
+vim.lsp.buf.formatting()
+end,
+})

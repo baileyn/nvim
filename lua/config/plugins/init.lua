@@ -136,7 +136,7 @@ local function init()
 	use({ "hrsh7th/cmp-cmdline", after = "nvim-cmp" })
 	use({ "hrsh7th/cmp-path", after = "cmp-buffer" })
 	use({ "hrsh7th/cmp-calc", after = "cmp-path" })
-	use({ "github/copilot.vim" })
+	-- use({ "github/copilot.vim" })
 	use({ "onsails/lspkind-nvim" })
 
 	use({ "saadparwaiz1/cmp_luasnip" })
@@ -182,7 +182,6 @@ local function init()
 		end,
 	})
 
-	use({ "mhartington/formatter.nvim", config = "require('config.plugins.format')" })
 	use({ "rcarriga/nvim-notify" })
 	use({ "folke/which-key.nvim", config = "require('config.plugins.whichkey')" })
 	use({
@@ -231,6 +230,13 @@ local function init()
 			})
 		end,
 	})
+    use({'jose-elias-alvarez/null-ls.nvim', config = function()
+        require("null-ls").setup({
+            sources = {
+                require("null-ls").builtins.formatting.stylua,
+            }
+        })
+    end})
 end
 
 local plugins = setmetatable({}, {
