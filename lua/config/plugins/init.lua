@@ -178,6 +178,16 @@ local function init()
 		end,
 	})
 	use({ "nvim-telescope/telescope-file-browser.nvim", requires = { "nvim-telescope/telescope.nvim" } })
+	use({
+		"windwp/nvim-ts-autotag",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				autotag = {
+					enable = true,
+				},
+			})
+		end,
+	})
 end
 
 local plugins = setmetatable({}, {

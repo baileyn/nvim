@@ -28,6 +28,31 @@ local on_attach = function(client, bufnr)
 		},
 	}, { buffer = bufnr, mode = "n", prefix = "<leader>b" })
 
+	require("which-key").register({
+		g = {
+			name = "Goto",
+			r = { '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', "References" },
+			D = { '<cmd>lua require"lspsaga.provider".preview_definition()<CR>', "Preview Definition" },
+			d = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
+		},
+		c = {
+			name = "Code",
+			a = { '<cmd>lua require"lspsaga.codeaction".code_action()<CR>', "Code Action" },
+			n = { '<cmd>lua require"lspsaga.rename".rename()<CR>', "Rename" },
+		},
+		K = {
+			'<cmd>lua require"lspsaga.signaturehelp".signature_help()<CR>',
+			"Signature Help",
+		},
+		["["] = {
+			name = "Jump Previous",
+			d = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Diagnostic" },
+		},
+		["]"] = {
+			name = "Jump",
+			d = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Diagnostic" },
+		},
+	}, { buffer = bufnr, mode = "n" })
 	-- { mode = 'v', {
 	--         { 'ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>' },
 	--     },
