@@ -8,9 +8,11 @@ require("neorg").setup({
 		},
 		["core.gtd.base"] = {
 			config = {
-				workspace = "gtd",
+				workspace = "home",
 			},
 		},
+        ["core.gtd.ui"] = {},
+        ["core.gtd.helpers"] = {},
 		["core.presenter"] = {
 			config = {
 				zen_mode = "zen-mode",
@@ -25,9 +27,8 @@ require("neorg").setup({
 		["core.norg.dirman"] = {
 			config = {
 				workspaces = {
-					work = "~/notes/default",
+					home = "~/notes/home",
 				},
-                autodetect = false,
 			},
 		},
 		["core.norg.qol.toc"] = {},
