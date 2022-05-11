@@ -51,7 +51,7 @@ local function init()
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				-- One of "all", "maintained" (parsers with maintainers), or a list of languages
-				ensure_installed = { "rust", "go", "java", "yaml", "json" },
+				ensure_installed = { "rust", "go", "java", "yaml", "json", "hcl", "norg" },
 
 				-- Install languages synchronously (only applied to `ensure_installed`)
 				sync_install = false,
@@ -193,6 +193,12 @@ local function init()
 	})
 
 	use({ "nvim-lua/popup.nvim", requires = { "nvim-lua/plenary.nvim" } })
+	use({
+		"nvim-neorg/neorg",
+		requires = { "nvim-lua/plenary.nvim" },
+		after = { "nvim-treesitter", "telescope.nvim" },
+		config = "require('config.plugins.neorg')",
+	})
 end
 
 local plugins = setmetatable({}, {
