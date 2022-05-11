@@ -4,6 +4,7 @@ lsp_status.register_progress()
 
 local on_attach = function(client, bufnr)
 	require("which-key").register({
+        name = 'Buffer',
         K = { '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>', 'Hover Docs' },
         g = {
             name = 'Goto',
@@ -25,7 +26,7 @@ local on_attach = function(client, bufnr)
             name = 'Jump',
 		    d = {'<cmd>lua vim.diagnostic.goto_next()<CR>', "Diagnostic" },
         }
-	}, { buffer = bufnr, mode = "n", prefix = "<leader>" })
+	}, { buffer = bufnr, mode = "n", prefix = "<leader>b" })
 
 	-- { mode = 'v', {
 	--         { 'ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>' },
