@@ -141,6 +141,13 @@ local function init()
 			require("config.plugins.cmp").setup()
 		end,
 	})
+
+	use({
+		"simrat39/rust-tools.nvim",
+		requires = "neovim/nvim-lspconfig",
+	})
+	use({ "mfussenegger/nvim-dap", requires = "nvim-lua/plenary.nvim" })
+
 	use({ "hrsh7th/cmp-nvim-lsp-signature-help", after = "nvim-cmp" })
 	use({ "hrsh7th/cmp-nvim-lua", after = "nvim-cmp" })
 	use({ "hrsh7th/cmp-nvim-lsp", after = "cmp-nvim-lua" })
@@ -148,6 +155,7 @@ local function init()
 	use({ "hrsh7th/cmp-cmdline", after = "nvim-cmp" })
 	use({ "hrsh7th/cmp-path", after = "cmp-buffer" })
 	use({ "hrsh7th/cmp-calc", after = "cmp-path" })
+
 	-- use({ "github/copilot.vim" })
 	use({ "onsails/lspkind-nvim" })
 
@@ -189,11 +197,13 @@ local function init()
 
 	use({
 		"JoosepAlviste/nvim-ts-context-commentstring",
-		require("nvim-treesitter.configs").setup({
-			context_commentstring = {
-				enable = true,
-			},
-		}),
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				context_commentstring = {
+					enable = true,
+				},
+			})
+		end,
 	})
 	use({
 		"numToStr/Comment.nvim",
@@ -287,7 +297,8 @@ local function init()
 			})
 		end,
 	})
-    use({"mfussenegger/nvim-dap"})
+
+	use({ "f-person/git-blame.nvim" })
 end
 
 local plugins = setmetatable({}, {

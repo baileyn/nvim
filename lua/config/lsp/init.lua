@@ -76,7 +76,13 @@ lsp_installer.on_server_ready(function(server)
 		capabilities = capabilities,
 	}
 
-	if server.name == "yamlls" then
+	if server.name == "rust_analyzer" then
+		require("rust-tools").setup({
+			server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
+		})
+		server:attach_buffers()
+		return
+	elseif server.name == "yamlls" then
 		opts.settings = {
 			yaml = {
 				format = {
