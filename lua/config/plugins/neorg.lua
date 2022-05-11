@@ -17,7 +17,13 @@ require("neorg").setup({
 				workspaces = {
 					work = "~/notes/work",
 					home = "~/notes/home",
+                    gtd = "~/notes/gtd"
 				},
+			},
+		},
+		["core.gtd.base"] = {
+			config = {
+				workspace = "gtd",
 			},
 		},
 	},
