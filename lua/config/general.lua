@@ -63,4 +63,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
+vim.api.nvim_create_augroup("git_util", {})
+vim.api.nvim_create_autocmd("BufEnter", {
+	group = "git_util",
+	command = ":EnableBlameLine",
+})
+vim.api.nvim_create_autocmd("InsertLeave", {
+	group = "line_numbers",
+	command = ":set relativenumber",
+})
+
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
