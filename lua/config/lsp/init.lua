@@ -1,5 +1,6 @@
 local lsp_installer = require("nvim-lsp-installer")
 local lsp_status = require('lsp-status')
+lsp_status.register_progress()
 
 local on_attach = function(client, bufnr)
     require'nest'.applyKeymaps {

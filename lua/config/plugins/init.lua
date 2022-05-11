@@ -156,6 +156,7 @@ local function init()
         end
     }
 
+    use {'mhartington/formatter.nvim', config="require('config.plugins.format')"}
     use {'rcarriga/nvim-notify'}
 end
 
