@@ -40,12 +40,7 @@ function M.setup()
 			--            the rest do. they were included by default            --
 			----------------------------------------------------------------------
 			["<Tab>"] = cmp.mapping(function(fallback)
-				local copilot_keys = vim.fn["copilot#Accept"]()
-				if copilot_keys ~= "" and type(copilot_keys) == "string" then
-					vim.api.nvim_feedkeys(copilot_keys, "i", true)
-				else
-					fallback()
-				end
+				fallback()
 			end, {
 				"i",
 				"s",
@@ -63,6 +58,7 @@ function M.setup()
 		},
 		sources = cmp.config.sources({
 			{ name = "nvim_lsp" },
+			{ name = "nvim_lsp_signature_help" },
 			{ name = "nvim_lua" },
 			{ name = "buffer" },
 			{ name = "path" },
