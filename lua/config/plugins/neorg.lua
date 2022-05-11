@@ -6,6 +6,11 @@ require("neorg").setup({
 				neorg_leader = " ",
 			},
 		},
+		["core.gtd.base"] = {
+			config = {
+				workspace = "gtd",
+			},
+		},
 		["core.presenter"] = {
 			config = {
 				zen_mode = "zen-mode",
@@ -20,15 +25,9 @@ require("neorg").setup({
 		["core.norg.dirman"] = {
 			config = {
 				workspaces = {
-					work = "~/notes/work",
-					home = "~/notes/home",
-					gtd = "~/notes/gtd",
+					work = "~/notes/default",
 				},
-			},
-		},
-		["core.gtd.base"] = {
-			config = {
-				workspace = "gtd",
+                autodetect = false,
 			},
 		},
 		["core.norg.qol.toc"] = {},

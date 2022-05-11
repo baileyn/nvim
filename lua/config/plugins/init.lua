@@ -213,6 +213,7 @@ local function init()
 	use({ "nvim-lua/popup.nvim", requires = { "nvim-lua/plenary.nvim" } })
 	use({
 		"nvim-neorg/neorg",
+		tag = "0.0.11",
 		requires = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope" },
 		after = { "nvim-treesitter", "telescope.nvim" },
 		config = "require('config.plugins.neorg')",
