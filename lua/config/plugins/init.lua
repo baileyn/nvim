@@ -287,6 +287,7 @@ local function init()
 			})
 		end,
 	})
+    use({"mfussenegger/nvim-dap"})
 end
 
 local plugins = setmetatable({}, {
