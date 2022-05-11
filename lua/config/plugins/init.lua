@@ -35,6 +35,9 @@ local function init()
 	use({
 		"nvim-telescope/telescope.nvim",
 		requires = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("telescope").load_extension("file_browser")
+		end,
 	})
 
 	use({
@@ -137,7 +140,7 @@ local function init()
 	-- tpope is our savior.
 	use({ "tpope/vim-fugitive" })
 	use({ "tpope/vim-speeddating" })
-    use({"tpope/vim-vinegar"})
+	use({ "tpope/vim-vinegar" })
 
 	-- Status Line for Neovim
 	use({
@@ -174,6 +177,7 @@ local function init()
 			require("nvim-gps").setup()
 		end,
 	})
+	use({ "nvim-telescope/telescope-file-browser.nvim", requires = { "nvim-telescope/telescope.nvim" } })
 end
 
 local plugins = setmetatable({}, {

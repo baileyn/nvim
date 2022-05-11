@@ -25,3 +25,4 @@ augroup custom_commands
     autocmd InsertLeave * :set relativenumber
 augroup end
 ]], true)
+

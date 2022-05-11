@@ -4,28 +4,28 @@ lsp_status.register_progress()
 
 local on_attach = function(client, bufnr)
 	require("which-key").register({
-        name = 'Buffer',
-        K = { '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>', 'Hover Docs' },
-        g = {
-            name = 'Goto',
-            r = {'<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', 'References'},
-            D = {'<cmd>lua require"lspsaga.provider".preview_definition()<CR>', 'Preview Definition' },
-            d = {'<cmd>lua vim.lsp.buf.definition()<CR>', 'Definition' },
-        },
-        c = {
-            name = 'Code',
-            a = {'<cmd>lua require"lspsaga.codeaction".code_action()<CR>', 'Code Action'},
-            h = {'<cmd>lua require"lspsaga.signaturehelp".signature_help()<CR>', 'Signature Help'},
-            n = {'<cmd>lua require"lspsaga.rename".rename()<CR>', 'Rename' }
-        },
-        ['['] = {
-            name = 'Jump Previous',
-		    d = {'<cmd>lua vim.diagnostic.goto_prev()<CR>', "Diagnostic" },
-        },
-        [']'] = {
-            name = 'Jump',
-		    d = {'<cmd>lua vim.diagnostic.goto_next()<CR>', "Diagnostic" },
-        }
+		name = "Buffer",
+		K = { '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>', "Hover Docs" },
+		g = {
+			name = "Goto",
+			r = { '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', "References" },
+			D = { '<cmd>lua require"lspsaga.provider".preview_definition()<CR>', "Preview Definition" },
+			d = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
+		},
+		c = {
+			name = "Code",
+			a = { '<cmd>lua require"lspsaga.codeaction".code_action()<CR>', "Code Action" },
+			h = { '<cmd>lua require"lspsaga.signaturehelp".signature_help()<CR>', "Signature Help" },
+			n = { '<cmd>lua require"lspsaga.rename".rename()<CR>', "Rename" },
+		},
+		["["] = {
+			name = "Jump Previous",
+			d = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Diagnostic" },
+		},
+		["]"] = {
+			name = "Jump",
+			d = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Diagnostic" },
+		},
 	}, { buffer = bufnr, mode = "n", prefix = "<leader>b" })
 
 	-- { mode = 'v', {
@@ -43,6 +43,39 @@ lsp_installer.on_server_ready(function(server)
 		on_attach = on_attach,
 		capabilities = capabilities,
 	}
+
+	if server.name == "yamlls" then
+		opts.settings = {
+			yaml = {
+				format = {
+					enable = true,
+				},
+				hover = true,
+				completion = true,
+
+				customTags = {
+					"!fn",
+					"!And",
+					"!If",
+					"!Not",
+					"!Equals",
+					"!Or",
+					"!FindInMap sequence",
+					"!Base64",
+					"!Cidr",
+					"!Ref",
+					"!Ref Scalar",
+					"!Sub",
+					"!GetAtt",
+					"!GetAZs",
+					"!ImportValue",
+					"!Select",
+					"!Split",
+					"!Join sequence",
+				},
+			},
+		}
+	end
 
 	-- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
 	server:setup(opts)
