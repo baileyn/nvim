@@ -116,6 +116,9 @@ local function init()
 	use({ "hrsh7th/cmp-buffer", after = "cmp-nvim-lsp" })
 	use({ "hrsh7th/cmp-path", after = "cmp-buffer" })
 	use({ "hrsh7th/cmp-calc", after = "cmp-path" })
+	use({ "L3MON4D3/LuaSnip" })
+	use({ "saadparwaiz1/cmp_luasnip" })
+
 	use({
 		"David-Kunz/cmp-npm",
 		after = "cmp-calc",
@@ -188,6 +191,8 @@ local function init()
 			})
 		end,
 	})
+
+	use({ "nvim-lua/popup.nvim", requires = { "nvim-lua/plenary.nvim" } })
 end
 
 local plugins = setmetatable({}, {
