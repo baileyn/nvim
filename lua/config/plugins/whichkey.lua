@@ -34,7 +34,7 @@ wk.register({
 
 wk.register({
     name = 'Buffer',
-    ['='] = { ':Format<CR>', 'Format' },
+    ['f'] = { ':Format<CR>', 'Format' },
 }, { prefix = '<leader>b' })
 
 wk.register({
