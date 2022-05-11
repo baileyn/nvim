@@ -10,9 +10,10 @@ end
 ----------------------------------------------------------------------
 -- You can also use lazy loading so you only get in memory snippets of languages you use
 require("luasnip/loaders/from_vscode").lazy_load() -- You can pass { paths = "./my-snippets/"} as well
-local check_backspace = function()
-	local col = vim.fn.col(".") - 1
-	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
+
+local has_words_before = function()
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
 function M.setup()
@@ -40,12 +41,33 @@ function M.setup()
 			--            the rest do. they were included by default            --
 			----------------------------------------------------------------------
 			["<Tab>"] = cmp.mapping(function(fallback)
-				fallback()
-			end, {
-				"i",
-				"s",
-			}),
+				if cmp.visible() then
+					cmp.select_next_item()
+				elseif luasnip.expand_or_jumpable() then
+					luasnip.expand_or_jump()
+				elseif has_words_before() then
+					cmp.complete()
+				else
+					fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+				end
+			end, { "i", "s" }),
+
+			["<S-Tab>"] = cmp.mapping(function(fallback)
+				if cmp.visible() then
+					cmp.select_prev_item()
+				elseif luasnip.jumpable(-1) then
+					luasnip.jump(-1)
+				else
+					fallback()
+				end
+			end, { "i", "s" }),
 			----------------------------------------------------------------------
+			["<C-j>"] = cmp.mapping(function(fallback)
+				cmp.select_next_item()
+			end),
+			["<C-k>"] = cmp.mapping(function(fallback)
+				cmp.select_prev_item()
+			end),
 			["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
 			["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
 			["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
