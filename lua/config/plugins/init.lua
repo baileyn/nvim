@@ -71,7 +71,7 @@ local function init()
 
 			require("nvim-treesitter.configs").setup({
 				-- One of "all", "maintained" (parsers with maintainers), or a list of languages
-				ensure_installed = { "rust", "go", "java", "yaml", "json", "hcl", "norg", "norg_meta", "norg_table" },
+				ensure_installed = { "rust", "go", "java", "yaml", "json", "hcl", "norg", "norg_meta", "norg_table", "toml" },
 
 				-- Install languages synchronously (only applied to `ensure_installed`)
 				sync_install = false,
