@@ -39,3 +39,5 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		vim.lsp.buf.formatting()
 	end,
 })
+
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
