@@ -92,14 +92,6 @@ local function init()
         end
     }
 
-    -- Allows for nicely-defined keymappings.
-    use {
-        'LionC/nest.nvim',
-        config = function()
-            require('config.plugins.keymaps').setup()
-        end
-    }
-
     use {
         'tami5/lspsaga.nvim',
         config = function()
@@ -158,6 +150,7 @@ local function init()
 
     use {'mhartington/formatter.nvim', config="require('config.plugins.format')"}
     use {'rcarriga/nvim-notify'}
+    use {'folke/which-key.nvim', config="require('config.plugins.whichkey')"}
 end
 
 local plugins = setmetatable({}, {
