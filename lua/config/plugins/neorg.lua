@@ -1,6 +1,11 @@
 require("neorg").setup({
 	load = {
 		["core.defaults"] = {},
+		["core.keybinds"] = {
+			config = {
+				neorg_leader = " ",
+			},
+		},
 		["core.presenter"] = {
 			config = {
 				zen_mode = "zen-mode",
@@ -17,7 +22,7 @@ require("neorg").setup({
 				workspaces = {
 					work = "~/notes/work",
 					home = "~/notes/home",
-                    gtd = "~/notes/gtd"
+					gtd = "~/notes/gtd",
 				},
 			},
 		},
@@ -26,5 +31,7 @@ require("neorg").setup({
 				workspace = "gtd",
 			},
 		},
+		["core.norg.qol.toc"] = {},
+		["core.integrations.telescope"] = {},
 	},
 })
