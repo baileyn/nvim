@@ -348,6 +348,8 @@ local function init()
 	})
 
 	use({ "f-person/git-blame.nvim" })
+
+	use({ "ThePrimeagen/harpoon", requires = { "nvim-lua/plenary.nvim" } })
 end
 
 local plugins = setmetatable({}, {

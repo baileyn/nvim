@@ -31,6 +31,21 @@ wk.register({
 		v = { ":E<CR>", "View" },
 		f = { ":Telescope file_browser<CR><ESC>", "File Browser" },
 	},
+
+	h = {
+		name = "Harpoon",
+		h = { ":lua require('harpoon.mark').add_file()<CR>", "Harpoon File" },
+		m = { ":lua require('harpoon.ui').toggle_quick_menu()<CR>", "Toggle Quick Menu" },
+		a = { ":lua require('harpoon.ui').nav_file(1)<CR>", "Go to File 1" },
+		r = { ":lua require('harpoon.ui').nav_file(2)<CR>", "Go to File 2" },
+		s = { ":lua require('harpoon.ui').nav_file(3)<CR>", "Go to File 3" },
+		t = { ":lua require('harpoon.ui').nav_file(4)<CR>", "Go to File 4" },
+
+		n = { ":lua require('harpoon.term').gotoTerminal(1)<CR>", "Go to Terminal 1" },
+		e = { ":lua require('harpoon.term').gotoTerminal(2)<CR>", "Go to Terminal 2" },
+		i = { ":lua require('harpoon.term').gotoTerminal(3)<CR>", "Go to Terminal 3" },
+		o = { ":lua require('harpoon.term').gotoTerminal(4)<CR>", "Go to Terminal 4" },
+	},
 }, { prefix = "<leader>" })
 
 wk.register({
