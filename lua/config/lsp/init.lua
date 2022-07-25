@@ -1,5 +1,3 @@
-local lsp_installer = require("nvim-lsp-installer")
-
 local on_attach = function(client, bufnr)
 	require("which-key").register({
 		name = "Buffer",
@@ -67,55 +65,78 @@ local on_attach = function(client, bufnr)
 	end
 end
 
-lsp_installer.on_server_ready(function(server)
-	local cmp_nvim_lsp = require("cmp_nvim_lsp")
-	local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+require("mason").setup({})
+require("mason-lspconfig").setup({})
 
-	local opts = {
-		on_attach = on_attach,
-		capabilities = capabilities,
-	}
+local installed_servers = require("mason-lspconfig").get_installed_servers()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
+local default_opts = {
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
+for _, server in pairs(installed_servers) do
 	if server.name == "rust_analyzer" then
-		require("rust-tools").setup({
-			server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
-		})
-		server:attach_buffers()
-		return
+		default_opts.tools = {
+			inlay_hints = {
+				-- prefix for parameter hints
+				-- default: "<-"
+				parameter_hints_prefix = "« ",
+				-- prefix for all the other hints (type, chaining)
+				-- default: "=>"
+				other_hints_prefix = "» ",
+			},
+		}
 	elseif server.name == "yamlls" then
-		opts.settings = {
-			yaml = {
-				format = {
-					enable = true,
-				},
-				hover = true,
-				completion = true,
-
+		default_opts.settings = {
+			["yaml"] = {
 				customTags = {
-					"!fn",
+					"!And sequence",
 					"!And",
-					"!If",
-					"!Not",
-					"!Equals",
-					"!Or",
-					"!FindInMap sequence",
 					"!Base64",
 					"!Cidr",
-					"!Ref",
-					"!Ref Scalar",
-					"!Sub",
-					"!GetAtt",
+					"!Condition",
+					"!Equals sequence",
+					"!Equals",
+					"!FindInMap sequence",
 					"!GetAZs",
+					"!GetAtt",
+					"!If sequence",
+					"!If",
 					"!ImportValue",
-					"!Select",
-					"!Split",
 					"!Join sequence",
+					"!Not sequence",
+					"!Not",
+					"!Or sequence",
+					"!Or",
+					"!Ref scalar",
+					"!Ref sequence",
+					"!Ref",
+					"!Select sequence",
+					"!Select",
+					"!Split sequence",
+					"!Split",
+					"!Sub sequence",
+					"!Sub",
+					"!fn",
 				},
+				schemas = {
+					["https://raw.githubusercontent.com/awslabs/goformation/v4.18.2/schema/cloudformation.schema.json"] = "cloudformation/*.template",
+				},
+				schemaStore = {
+					url = "https://www.schemastore.org/api/json/catalog.json",
+					enable = true,
+				},
+				schemaDownload = { enable = true },
+				completion = true,
+				validate = true,
 			},
 		}
 	end
+	-- default setup for all servers
+	require("lspconfig")[server].setup(default_opts)
+end
 
-	-- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
-	server:setup(opts)
-	vim.cmd([[ do User LspAttachBuffers ]])
-end)
+require("rust-tools").setup({ server = default_opts })

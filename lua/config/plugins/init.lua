@@ -211,14 +211,18 @@ local function init()
 	-- Add components to show LSP Status in Status Line
 	use({ "jose-elias-alvarez/nvim-lsp-ts-utils", after = { "nvim-treesitter" } })
 
+	-- use({
+	-- 	"williamboman/nvim-lsp-installer",
+	-- 	event = "BufEnter",
+	-- 	after = "cmp-nvim-lsp",
+	-- 	config = "require('config.lsp')",
+	-- })
 	use({
-		"williamboman/nvim-lsp-installer",
-		event = "BufEnter",
+		"williamboman/mason.nvim",
 		after = "cmp-nvim-lsp",
+		requires = { "williamboman/mason-lspconfig.nvim" },
 		config = "require('config.lsp')",
 	})
-
-	use({ "tveskag/nvim-blame-line" })
 
 	-- tpope is our savior.
 	use({ "tpope/vim-fugitive" })
