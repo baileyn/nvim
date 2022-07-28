@@ -4,7 +4,6 @@ vim.opt.autoindent = true
 vim.opt.expandtab = true
 vim.opt.smarttab = true
 vim.opt.updatetime = 300
-vim.opt.fileformats = "unix"
 vim.opt.wrap = false
 vim.g.mapleader = " "
 vim.g.netrw_altfile = 1
