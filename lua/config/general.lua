@@ -60,9 +60,18 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end,
 })
 
-vim.api.nvim_create_autocmd("InsertLeave", {
-    group = "line_numbers",
-    command = ":set relativenumber",
-})
-
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+
+vim.api.nvim_create_augroup("highlight", {})
+vim.api.nvim_create_autocmd("CursorHold", {
+    group = "highlight",
+    callback = function()
+        vim.lsp.buf.document_highlight()
+    end,
+})
+vim.api.nvim_create_autocmd("CursorMoved", {
+    group = "highlight",
+    callback = function()
+        vim.lsp.buf.clear_references()
+    end,
+})
