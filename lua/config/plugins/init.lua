@@ -80,6 +80,7 @@ local function init()
                     "hcl",
                     "norg",
                     "toml",
+                    "org",
                 },
 
                 -- Install languages synchronously (only applied to `ensure_installed`)
@@ -97,7 +98,7 @@ local function init()
                     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
                     -- Using this option may slow down your editor, and you may see some duplicate highlights.
                     -- Instead of true it can also be a list of languages
-                    additional_vim_regex_highlighting = false,
+                    additional_vim_regex_highlighting = { "org" },
                 },
             })
         end,
@@ -312,12 +313,23 @@ local function init()
     })
 
     use({ "nvim-lua/popup.nvim", requires = { "nvim-lua/plenary.nvim" } })
+    -- use({
+    --     "nvim-neorg/neorg",
+    --     -- tag = "0.0.11",
+    --     requires = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope" },
+    --     after = { "nvim-treesitter", "telescope.nvim" },
+    --     config = "require('config.plugins.neorg')",
+    -- })
     use({
-        "nvim-neorg/neorg",
-        -- tag = "0.0.11",
-        requires = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope" },
-        after = { "nvim-treesitter", "telescope.nvim" },
-        config = "require('config.plugins.neorg')",
+        "nvim-orgmode/orgmode",
+        requires = { "nvim-treesitter/nvim-treesitter" },
+        config = function()
+            require("orgmode").setup_ts_grammar()
+            require("orgmode").setup({
+                org_agenda_files = { "~/notes/**/*" },
+                org_default_notes_file = "~/notes/org/refile.org",
+            })
+        end,
     })
 
     use({
