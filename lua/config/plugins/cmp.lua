@@ -5,11 +5,6 @@ local snip_status_ok, luasnip = pcall(require, "luasnip")
 if not snip_status_ok then
     return
 end
-----------------------------------------------------------------------
---               enable rafamadriz/friendly-snippets                --
-----------------------------------------------------------------------
--- You can also use lazy loading so you only get in memory snippets of languages you use
-require("luasnip/loaders/from_vscode").lazy_load() -- You can pass { paths = "./my-snippets/"} as well
 
 local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
