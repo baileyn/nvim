@@ -80,10 +80,7 @@ vim.api.nvim_create_autocmd("CursorHold", {
 	group = "highlight",
 	callback = function()
 		if BufferLspSupportsHighlighting() then
-			print("Supported")
 			vim.lsp.buf.document_highlight()
-		else
-			print("Not supported")
 		end
 	end,
 })
