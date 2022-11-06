@@ -226,9 +226,7 @@ return require('packer').startup(function(use)
         'williamboman/mason-lspconfig.nvim',
         after = 'mason.nvim',
         config = function()
-            require('mason-lspconfig').setup {
-                automatic_installation = true
-            }
+            require('mason-lspconfig').setup { }
         end
     }
 
