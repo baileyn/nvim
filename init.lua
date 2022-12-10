@@ -251,6 +251,8 @@ return require('packer').startup(function(use)
         end
     }
 
+    use { 'tpope/vim-vinegar' }
+
     if packer_bootstrap then
         require('packer').sync()
     end
