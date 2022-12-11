@@ -314,6 +314,17 @@ return require('packer').startup(function(use)
       end
     }
 
+    use {
+        'JoosepAlviste/nvim-ts-context-commentstring',
+        config = function()
+            require'nvim-treesitter.configs'.setup {
+              context_commentstring = {
+                enable = true
+              }
+            }
+        end
+    }
+
     if packer_bootstrap then
         require('packer').sync()
     end
