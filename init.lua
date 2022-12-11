@@ -38,6 +38,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end,
 })
 
+local group = vim.api.nvim_create_augroup('NeogitGroups', { clear = true })
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'NeogitPushComplete',
+  group = group,
+  callback = require('neogit').close,
+})
+
 -- Packer Bootstrap
 local ensure_packer = function()
     local fn = vim.fn
@@ -252,6 +259,60 @@ return require('packer').startup(function(use)
     }
 
     use { 'tpope/vim-vinegar' }
+
+    use {
+      'lewis6991/gitsigns.nvim',
+        config = function()
+            require('gitsigns').setup()
+        end
+    }
+
+    use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+
+    use {
+        'TimUntersberger/neogit',
+        requires = {'nvim-lua/plenary.nvim', 'sindrets/diffview.nvim' },
+        config = function()
+            require('neogit').setup {
+                kind = 'split_above',
+                disable_commit_confirmation = true,
+                commit_popup = {
+                  kind = "floating",
+                },
+                popup = {
+                  kind = "replace",
+                },
+                integrations = {
+                    diffview = true,
+                },
+            }
+        end
+    }
+
+    use 'nvim-tree/nvim-web-devicons'
+    use {
+        'terrortylor/nvim-comment',
+        config = function()
+            require('nvim_comment').setup()
+        end
+    }
+
+    use {
+      "folke/which-key.nvim",
+      config = function()
+            local wk = require('which-key')
+            wk.setup()
+
+            wk.register({
+                g = {
+                    g = { function() require('neogit').open() end, "Open Neogit"},
+                },
+                t = {
+                    c = { '<CMD>tabclose<CR>', 'Close Tab' },
+                }
+            }, { prefix = "<leader>" })
+      end
+    }
 
     if packer_bootstrap then
         require('packer').sync()
