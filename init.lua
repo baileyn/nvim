@@ -17,7 +17,7 @@ vim.opt.foldlevel = 2
 vim.wo.number = true
 vim.wo.relativenumber = true
 
-vim.cmd('colorscheme habamax')
+vim.cmd [[colorscheme habamax]]
 
 -- Augroups
 vim.api.nvim_create_augroup("line_numbers", {})
@@ -38,13 +38,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end,
 })
 
-local group = vim.api.nvim_create_augroup('NeogitGroups', { clear = true })
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'NeogitPushComplete',
-  group = group,
-  callback = require('neogit').close,
-})
-
 -- Packer Bootstrap
 local ensure_packer = function()
     local fn = vim.fn
@@ -63,9 +56,30 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
     use 'nvim-lua/plenary.nvim'
+
+    use {
+        'williamboman/mason.nvim',
+        config = function()
+            require("mason").setup({
+                ui = {
+                    icons = {
+                        package_installed = "✓",
+                        package_pending = "➜",
+                        package_uninstalled = "✗"
+                    }
+                }
+            })
+        end
+    }
+
+    use {
+        'williamboman/mason-lspconfig.nvim',
+        after = 'mason.nvim',
+    }
+
     use {
         'neovim/nvim-lspconfig',
-        after = { 'nvim-cmp', 'mason-lspconfig.nvim' },
+        after = { 'nvim-cmp', 'mason-lspconfig.nvim', 'mason.nvim' },
         config = function()
             -- Setup keymaps
             local opts = { noremap=true, silent=true }
@@ -95,6 +109,7 @@ return require('packer').startup(function(use)
 
             local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
  
+            require('mason-lspconfig').setup { }
             require('mason-lspconfig').setup_handlers {
                 function(server_name)
                     require('lspconfig')[server_name].setup {
@@ -111,6 +126,7 @@ return require('packer').startup(function(use)
         run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
         config = function()
             require('nvim-treesitter.configs').setup {
+                ensure_installed = { 'vim' },
                 auto_install = true,
                 highlight = {
                     enable = true,
@@ -215,29 +231,6 @@ return require('packer').startup(function(use)
     }
 
     use {
-        'williamboman/mason.nvim',
-        config = function()
-            require("mason").setup({
-                ui = {
-                    icons = {
-                        package_installed = "✓",
-                        package_pending = "➜",
-                        package_uninstalled = "✗"
-                    }
-                }
-            })
-        end
-    }
-
-    use {
-        'williamboman/mason-lspconfig.nvim',
-        after = 'mason.nvim',
-        config = function()
-            require('mason-lspconfig').setup { }
-        end
-    }
-
-    use {
         'nvim-neorg/neorg',
         requires = 'nvim-lua/plenary.nvim',
         run = ":Neorg sync-parsers",
@@ -269,26 +262,6 @@ return require('packer').startup(function(use)
 
     use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
 
-    use {
-        'TimUntersberger/neogit',
-        requires = {'nvim-lua/plenary.nvim', 'sindrets/diffview.nvim' },
-        config = function()
-            require('neogit').setup {
-                kind = 'split_above',
-                disable_commit_confirmation = true,
-                commit_popup = {
-                  kind = "floating",
-                },
-                popup = {
-                  kind = "replace",
-                },
-                integrations = {
-                    diffview = true,
-                },
-            }
-        end
-    }
-
     use 'nvim-tree/nvim-web-devicons'
     use {
         'terrortylor/nvim-comment',
@@ -304,9 +277,6 @@ return require('packer').startup(function(use)
             wk.setup()
 
             wk.register({
-                g = {
-                    g = { function() require('neogit').open() end, "Open Neogit"},
-                },
                 t = {
                     c = { '<CMD>tabclose<CR>', 'Close Tab' },
                 }
@@ -324,6 +294,8 @@ return require('packer').startup(function(use)
             }
         end
     }
+
+    use { 'tpope/vim-fugitive' }
 
     if packer_bootstrap then
         require('packer').sync()
