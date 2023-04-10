@@ -38,6 +38,8 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     end,
 })
 
+vim.keymap.set('t', '<esc>', '<C-\\><C-N>', { noremap = true, silent = true })
+
 -- Packer Bootstrap
 local ensure_packer = function()
     local fn = vim.fn
@@ -342,12 +344,10 @@ return require('packer').startup(function(use)
                 ensure_installed = { 'stylua', 'jq' },
                 automatic_setup = true,
             }
-            require('mason-null-ls').setup_handlers()
         end,
     }
 
     use { 'tpope/vim-abolish' }
-    use { 'github/copilot.vim' }
 
     if packer_bootstrap then
         require('packer').sync()
