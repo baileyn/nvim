@@ -3,7 +3,7 @@ return {
     -- Documentation
     "nanotee/luv-vimdocs",
     "milisims/nvim-luaref",
-    "tpope/vim-vinegar",
+    -- "tpope/vim-vinegar",
 
     {
         "ThePrimeagen/harpoon",

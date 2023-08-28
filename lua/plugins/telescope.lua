@@ -88,10 +88,17 @@ local M = {
         local actions = require("telescope.actions")
         local lga_actions = require("telescope-live-grep-args.actions")
 
+        require("telescope").load_extension("fzy_native")
+        require("telescope").load_extension("file_browser")
+        require("telescope").load_extension("ui-select")
+        require("telescope").load_extension("git_worktree")
+        require("telescope").load_extension("env")
+        require("telescope").load_extension("refactoring")
+
         require("telescope").setup({
             defaults = {
                 file_sorter = require("telescope.sorters").get_fzy_sorter,
-                prompt_prefix = " >",
+                prompt_prefix = " > ",
                 color_devicons = true,
 
                 file_previewer = require("telescope.previewers").vim_buffer_cat.new,
@@ -126,13 +133,6 @@ local M = {
                 },
             },
         })
-
-        require("telescope").load_extension("fzy_native")
-        require("telescope").load_extension("file_browser")
-        require("telescope").load_extension("ui-select")
-        require("telescope").load_extension("git_worktree")
-        require("telescope").load_extension("env")
-        require("telescope").load_extension("refactoring")
 
         -- remap to open the Telescope refactoring menu in visual mode
         vim.api.nvim_set_keymap(
