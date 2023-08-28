@@ -52,7 +52,6 @@
   "refactoring.nvim": { "branch": "master", "commit": "2cfd6ddb0acece95d9658560ae9740b98ef70dbb" },
   "rust-tools.nvim": { "branch": "master", "commit": "0cc8adab23117783a0292a0c8a2fbed1005dc645" },
   "s3edit.nvim": { "branch": "main", "commit": "89d602431b750ab800b5aa2c7b46b948d7a539a1" },
-  "silicon.nvim": { "branch": "main", "commit": "e0b7d78545470ef72ca6c0cef3980b8a779f4385" },
   "snip-lookup.nvim": { "branch": "main", "commit": "99e710772444c7c7ecff9d419d592b80ee50febc" },
   "targets.vim": { "branch": "master", "commit": "642d3a4ce306264b05ea3219920b13ea80931767" },
   "telescope-env.nvim": { "branch": "master", "commit": "00a703cc7b713cdda0a981d88fddf3ce25502af5" },

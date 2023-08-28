@@ -147,7 +147,7 @@ local M = {
 M.search_dotfiles = function()
     require("telescope.builtin").git_files({
         prompt_title = "< dotfiles >",
-        cwd = "$HOME/.config/nvim/",
+        cwd = vim.fn.stdpath("config"),
     })
 end
 
