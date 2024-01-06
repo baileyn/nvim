@@ -127,6 +127,14 @@ return {
                 -- default setup for all servers
                 require('lspconfig')[server].setup(default_opts)
             end
+
+            vim.api.nvim_create_augroup('formatOnSave', {})
+            vim.api.nvim_create_autocmd('BufWritePre', {
+                group = 'formatOnSave',
+                callback = function()
+                    vim.lsp.buf.format()
+                end,
+            })
         end,
     }
 }
