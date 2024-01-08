@@ -1,14 +1,14 @@
 return {
-	{
-		'WhoIsSethDaniel/mason-tool-installer.nvim',
-		dependencies = { 'williamboman/mason.nvim' },
-		config = function()
-		require('mason-tool-installer').setup {
-				ensure_installed = {
-				},
-			}
-		end,
-	},
+    {
+        'WhoIsSethDaniel/mason-tool-installer.nvim',
+        dependencies = { 'williamboman/mason.nvim' },
+        config = function()
+            require('mason-tool-installer').setup {
+                ensure_installed = {
+                },
+            }
+        end,
+    },
     {
         'williamboman/mason.nvim',
         config = function()
@@ -25,7 +25,7 @@ return {
     },
     {
         'williamboman/mason.nvim',
-        dependencies = {'williamboman/mason-lspconfig.nvim', 'j-hui/fidget.nvim', 'hrsh7th/cmp-nvim-lsp', 'neovim/nvim-lspconfig'},
+        dependencies = { 'williamboman/mason-lspconfig.nvim', 'j-hui/fidget.nvim', 'hrsh7th/cmp-nvim-lsp', 'neovim/nvim-lspconfig' },
         config = function()
             require('fidget').setup {
                 text = {
@@ -78,6 +78,19 @@ return {
                             other_hints_prefix = '» ',
                         },
                     }
+                elseif server.name == "tsserver" then
+                    local function organize_imports()
+                        local params = {
+                            command = "_typescript.organizeImports",
+                            arguments = { vim.api.nvim_buf_get_name(0) },
+                            title = ""
+                        }
+                        vim.lsp.buf.execute_command(params)
+                    end
+                    default_opts.commands = {
+                        organize_imports(),
+                        description = "Organize Imports"
+                    }
                 elseif server.name == 'yamlls' then
                     default_opts.settings = {
                         ['yaml'] = {
@@ -112,7 +125,8 @@ return {
                                 '!fn',
                             },
                             schemas = {
-                                ['https://raw.githubusercontent.com/awslabs/goformation/v4.18.2/schema/cloudformation.schema.json'] = 'cloudformation/*.template',
+                                ['https://raw.githubusercontent.com/awslabs/goformation/v4.18.2/schema/cloudformation.schema.json'] =
+                                'cloudformation/*.template',
                             },
                             schemaStore = {
                                 url = 'https://www.schemastore.org/api/json/catalog.json',
