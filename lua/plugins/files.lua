@@ -1,16 +1,17 @@
 return {
     'tpope/vim-fugitive',
     {
-		"elihunter173/dirbuf.nvim",
-		config = function()
-			require("dirbuf").setup({
-				sort_order = "directories_first",
-			})
-			vim.cmd("command E Dirbuf")
-		end,
-	},
+        "elihunter173/dirbuf.nvim",
+        config = function()
+            require("dirbuf").setup({
+                sort_order = "directories_first",
+            })
+            vim.cmd("command E Dirbuf")
+        end,
+    },
     {
-        'nvim-telescope/telescope.nvim', tag = '0.1.5',
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.5',
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             local builtin = require('telescope.builtin')
@@ -23,7 +24,9 @@ return {
     },
     {
         'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+        dependencies = { 'nvim-telescope/telescope.nvim' },
+        build =
+        'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
         config = function()
             require('telescope').load_extension('fzf')
         end
