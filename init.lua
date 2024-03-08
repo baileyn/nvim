@@ -208,6 +208,7 @@ require('lazy').setup({
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+        ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
       }
     end,
   },
@@ -732,7 +733,23 @@ require('lazy').setup({
       'sindrets/diffview.nvim',
       'nvim-telescope/telescope.nvim',
     },
-    config = true,
+    config = function()
+      local neogit = require 'neogit'
+      neogit.setup {}
+
+      vim.keymap.set('n', '<leader>gg', function()
+        neogit.open { kind = 'split_above' }
+      end, { desc = 'Git status buffer' })
+    end,
+  },
+  {
+    'elihunter173/dirbuf.nvim',
+    config = function()
+      require('dirbuf').setup {
+        sort_order = 'directories_first',
+      }
+      vim.cmd 'command E Dirbuf'
+    end,
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
