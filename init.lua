@@ -46,9 +46,10 @@ vim.cmd([[
 ]])
 
 -- Toggle between relative and number
-local numbertoggle_group = vim.api.nvim_create_augroup("numbertoggle", {})
+local numbertoggle_group = vim.api.nvim_create_augroup("numbertoggle", { clear = true })
 
-vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
+    desc = 'Turn relative number on when leaving insert mode',
     group = numbertoggle_group,
     pattern = "*",
     callback = function()
@@ -57,12 +58,21 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave" }, {
     end,
 })
 
-vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter" }, {
+vim.api.nvim_create_autocmd({ "BufLeave", "InsertEnter" }, {
+    desc = 'Turn relative number off when entering insert mode',
     group = numbertoggle_group,
     pattern = "*",
     callback = function()
         vim.o.relativenumber = false
         vim.o.number = true
+    end,
+})
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+    desc = 'Highlight when yanking (copying) text',
+    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+    callback = function()
+        vim.highlight.on_yank()
     end,
 })
 

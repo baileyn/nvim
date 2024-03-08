@@ -1,7 +1,7 @@
 return {
     {
         'numToStr/Comment.nvim',
-        dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},
+        dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
         config = function()
             require('Comment').setup {
                 ignore = '^$',
@@ -9,7 +9,6 @@ return {
             }
         end,
     },
-
     {
         's1n7ax/nvim-comment-frame',
         dependencies = {
@@ -34,4 +33,5 @@ return {
         cmd = 'Neogen',
         dependencies = 'nvim-treesitter/nvim-treesitter',
     },
+    { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 }
