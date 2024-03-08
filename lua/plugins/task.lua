@@ -6,6 +6,7 @@ return {
         },
         config = function()
             local Path = require('plenary.path')
+            local vcpkgCmakePath = tostring(Path:new(vim.env.VCPKG_ROOT, 'scripts', 'buildsystems', 'vcpkg.cmake'))
             require('tasks').setup({
                 default_params = {                                                             -- Default module parameters with which `neovim.json` will be created.
                     cmake = {
@@ -14,7 +15,10 @@ return {
                         build_type = 'Debug',                                                  -- Build type, can be changed using `:Task set_module_param cmake build_type`.
                         dap_name = 'lldb',                                                     -- DAP configuration name from `require('dap').configurations`. If there is no such configuration, a new one with this name as `type` will be created.
                         args = {                                                               -- Task default arguments.
-                            configure = { '-D', 'CMAKE_EXPORT_COMPILE_COMMANDS=1', '-D', 'CMAKE_TOOLCHAIN_FILE=/Users/nbailey/vcpkg/scripts/buildsystems/vcpkg.cmake', '-G', 'Ninja' },
+                            configure = {
+                                '-D', 'CMAKE_EXPORT_COMPILE_COMMANDS=1',
+                                '-D', 'CMAKE_TOOLCHAIN_FILE=' .. vcpkgCmakePath,
+                                '-G', 'Ninja' },
                         },
                     },
                 },
@@ -26,6 +30,10 @@ return {
                 },
                 dap_open_command = function() return require('dap').repl.open() end, -- Command to run after starting DAP session. You can set it to `false` if you don't want to open anything or `require('dapui').open` if you are using https://github.com/rcarriga/nvim-dap-ui
             })
+
+            vim.keymap.set('n', '<space>tc', ":Task start auto configure<CR>")
+            vim.keymap.set('n', '<space>tb', ":Task start auto build<CR>")
+            vim.keymap.set('n', '<space>tr', ":Task start auto run<CR>")
         end,
     },
 }
