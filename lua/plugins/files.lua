@@ -1,29 +1,6 @@
 return {
-  -- 'tpope/vim-fugitive',
-  {
-    'NeogitOrg/neogit',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'sindrets/diffview.nvim',
-      'nvim-telescope/telescope.nvim',
-    },
-    config = function()
-      local neogit = require 'neogit'
-      neogit.setup {
-        graph_style = 'unicode',
-        kind = 'split_above',
-        integrations = {
-          telescope = true,
-          diffview = true,
-        },
-      }
-
-      -- Create a command, :G, to open Neogit
-      vim.api.nvim_create_user_command('G', function()
-        neogit.open()
-      end, {})
-    end,
-  },
+  'apple/pkl-neovim',
+  'tpope/vim-fugitive',
   {
     'elihunter173/dirbuf.nvim',
     config = function()

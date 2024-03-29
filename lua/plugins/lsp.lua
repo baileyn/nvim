@@ -3,7 +3,7 @@ return {
   'ray-x/lsp_signature.nvim',
   'simrat39/rust-tools.nvim', -- Inlay-Hints for rust
   {
-    'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
+    'https://github.com/ErichDonGubler/lsp_lines.nvim',
     config = function()
       require('lsp_lines').setup()
       -- start nvim with virtual text on, but lines disabled
