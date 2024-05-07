@@ -10,6 +10,7 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
         auto_install = true,
+        ignore_install = { 'org' },
         indent = {
           enabled = true,
         },
