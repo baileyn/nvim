@@ -44,6 +44,7 @@ vim.cmd [[
 ]]
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
 -- Toggle between relative and number
 local numbertoggle_group = vim.api.nvim_create_augroup('numbertoggle', { clear = true })

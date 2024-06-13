@@ -17,9 +17,12 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
       'williamboman/mason-lspconfig.nvim',
+      'jay-babu/mason-nvim-dap.nvim',
+      { 'rcarriga/nvim-dap-ui', dependencies = {"nvim-neotest/nvim-nio"} },
       { 'j-hui/fidget.nvim', opts = {} },
       'hrsh7th/cmp-nvim-lsp',
       'williamboman/mason.nvim',
+      'mfussenegger/nvim-dap'
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -119,6 +122,9 @@ return {
             },
           },
         },
+        clangd = {
+            cmd = { 'clangd', '--offset-encoding=utf-16' },
+        },
         yamlls = {
           settings = {
             yaml = {
@@ -168,6 +174,25 @@ return {
       }
 
       require('mason').setup()
+      require('mason-nvim-dap').setup{
+          handlers = {}
+      }
+
+    local dap, dapui = require("dap"), require("dapui")
+    dapui.setup()
+
+    dap.listeners.before.attach.dapui_config = function()
+      dapui.open()
+    end
+    dap.listeners.before.launch.dapui_config = function()
+      dapui.open()
+    end
+    dap.listeners.before.event_terminated.dapui_config = function()
+      dapui.close()
+    end
+    dap.listeners.before.event_exited.dapui_config = function()
+      dapui.close()
+    end
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
