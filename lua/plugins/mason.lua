@@ -7,6 +7,10 @@ local function on_attach(client, bufnr)
         vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
     end
 
+    -- vim.diagnostic.config {
+    --     virtual_lines = true
+    -- }
+
     keymap('[d', function()
         vim.diagnostic.jump { count = -1 }
     end, 'Previous diagnostic')
