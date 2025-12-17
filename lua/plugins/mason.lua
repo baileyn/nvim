@@ -1,7 +1,6 @@
 local methods = vim.lsp.protocol.Methods
 
 local function on_attach(client, bufnr)
-    print("On attach")
     local function keymap(lhs, rhs, desc, mode)
         mode = mode or 'n'
         vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
