@@ -1,5 +1,9 @@
 return {
-  'tami5/lspsaga.nvim',
+  'nvimdev/lspsaga.nvim',
   'ray-x/lsp_signature.nvim',
-  'simrat39/rust-tools.nvim', -- Inlay-Hints for rust
+  {
+      'mrcjkb/rustaceanvim',
+      version = '^6', -- Recommended
+      lazy = false, -- This plugin is already lazy
+  }
 }

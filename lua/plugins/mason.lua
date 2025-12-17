@@ -7,9 +7,9 @@ local function on_attach(client, bufnr)
         vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
     end
 
-    -- vim.diagnostic.config {
-    --     virtual_lines = true
-    -- }
+    vim.diagnostic.config {
+        virtual_lines = true
+    }
 
     keymap('[d', function()
         vim.diagnostic.jump { count = -1 }
@@ -56,7 +56,6 @@ local function on_attach(client, bufnr)
     end
 
     if client.supports_method(methods.textDocument_inlayHint) then
-        print("Inlay hing supported")
         local inlay_hints_group = vim.api.nvim_create_augroup('toggle_inlay_hints', { clear = false })
 
         -- Initial inlay hint display.
