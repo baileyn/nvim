@@ -24,7 +24,7 @@ local function on_attach(client, bufnr)
         vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR }
     end, 'Next error')
 
-    if client.supports_method(methods.textDocument_signatureHelp) then
+    if client:supports_method(methods.textDocument_signatureHelp) then
         keymap('<C-k>', function()
             -- Close the completion menu first (if open).
             local cmp = require 'cmp'
@@ -37,7 +37,7 @@ local function on_attach(client, bufnr)
     end
 
 
-    if client.supports_method(methods.textDocument_documentHighlight) then
+    if client:supports_method(methods.textDocument_documentHighlight) then
         local under_cursor_highlights_group =
         vim.api.nvim_create_augroup('mariasolos/cursor_highlights', { clear = false })
         vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave' }, {
@@ -54,7 +54,7 @@ local function on_attach(client, bufnr)
         })
     end
 
-    if client.supports_method(methods.textDocument_inlayHint) then
+    if client:supports_method(methods.textDocument_inlayHint) then
         local inlay_hints_group = vim.api.nvim_create_augroup('toggle_inlay_hints', { clear = false })
 
         -- Initial inlay hint display.
