@@ -1,100 +1,168 @@
 local methods = vim.lsp.protocol.Methods
 
 local function on_attach(client, bufnr)
-    local function keymap(lhs, rhs, desc, mode)
-        mode = mode or 'n'
-        vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
-    end
+  local function keymap(lhs, rhs, desc, mode)
+    mode = mode or 'n'
+    vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+  end
 
-    vim.diagnostic.config {
-        virtual_lines = true
+  local group = vim.api.nvim_create_augroup('OoO', {})
+
+  local function au(typ, pattern, cmdOrFn)
+    if type(cmdOrFn) == 'function' then
+      vim.api.nvim_create_autocmd(typ, { pattern = pattern, callback = cmdOrFn, group = group })
+    else
+      vim.api.nvim_create_autocmd(typ, { pattern = pattern, command = cmdOrFn, group = group })
+    end
+  end
+
+  vim.diagnostic.config {
+    virtual_lines = true,
+  }
+
+  keymap('[d', function()
+    vim.diagnostic.jump { count = -1 }
+  end, 'Previous diagnostic')
+
+  keymap(']d', function()
+    vim.diagnostic.jump { count = 1 }
+  end, 'Next diagnostic')
+
+  au({ 'CursorHold', 'InsertLeave' }, nil, function()
+    local opts = {
+      focusable = false,
+      scope = 'cursor',
+      close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter' },
     }
+    vim.diagnostic.open_float(nil, opts)
+  end)
 
-    keymap('[d', function()
-        vim.diagnostic.jump { count = -1 }
-    end, 'Previous diagnostic')
-    keymap(']d', function()
-        vim.diagnostic.jump { count = 1 }
-    end, 'Next diagnostic')
+  au('InsertEnter', nil, function()
+    vim.diagnostic.enable(false)
+  end)
 
-    keymap('[e', function()
-        vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR }
-    end, 'Previous error')
-    keymap(']e', function()
-        vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR }
-    end, 'Next error')
+  if client:supports_method(methods.textDocument_signatureHelp) then
+    keymap('<C-k>', function()
+      -- Close the completion menu first (if open).
+      local cmp = require 'cmp'
+      if cmp.visible() then
+        cmp.close()
+      end
+    end)
+  end
 
-    if client:supports_method(methods.textDocument_signatureHelp) then
-        keymap('<C-k>', function()
-            -- Close the completion menu first (if open).
-            local cmp = require 'cmp'
-            if cmp.visible() then
-                cmp.close()
-            end
+  au('InsertLeave', nil, function()
+    vim.diagnostic.enable(true)
+  end)
 
-            vim.lsp.buf.signature_help()
-        end, 'Signature help', 'i')
-    end
+  local function keymap(lhs, rhs, desc, mode)
+    mode = mode or 'n'
+    vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+  end
 
+  keymap('[d', function()
+    vim.diagnostic.jump { count = -1 }
+  end, 'Previous diagnostic')
 
-    if client:supports_method(methods.textDocument_documentHighlight) then
-        local under_cursor_highlights_group =
-        vim.api.nvim_create_augroup('mariasolos/cursor_highlights', { clear = false })
-        vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave' }, {
-            group = under_cursor_highlights_group,
-            desc = 'Highlight references under the cursor',
-            buffer = bufnr,
-            callback = vim.lsp.buf.document_highlight,
-        })
-        vim.api.nvim_create_autocmd({ 'CursorMoved', 'InsertEnter', 'BufLeave' }, {
-            group = under_cursor_highlights_group,
-            desc = 'Clear highlight references',
-            buffer = bufnr,
-            callback = vim.lsp.buf.clear_references,
-        })
-    end
+  keymap(']d', function()
+    vim.diagnostic.jump { count = 1 }
+  end, 'Next diagnostic')
 
-    if client:supports_method(methods.textDocument_inlayHint) then
-        local inlay_hints_group = vim.api.nvim_create_augroup('toggle_inlay_hints', { clear = false })
+  keymap('[e', function()
+    vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR }
+  end, 'Previous error')
 
-        -- Initial inlay hint display.
-        -- Idk why but without the delay inlay hints aren't displayed at the very start.
-        vim.defer_fn(function()
-            local mode = vim.api.nvim_get_mode().mode
-            vim.lsp.inlay_hint.enable(mode == 'n' or mode == 'v', { bufnr = bufnr })
-        end, 500)
+  keymap(']e', function()
+    vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR }
+  end, 'Next error')
 
-        vim.api.nvim_create_autocmd('InsertEnter', {
-            group = inlay_hints_group,
-            desc = 'Enable inlay hints',
-            buffer = bufnr,
-            callback = function()
-                vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
-            end,
-        })
-        vim.api.nvim_create_autocmd('InsertLeave', {
-            group = inlay_hints_group,
-            desc = 'Disable inlay hints',
-            buffer = bufnr,
-            callback = function()
-                vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-            end,
-        })
-    end
+  if client:supports_method(methods.textDocument_documentHighlight) then
+    local under_cursor_highlights_group = vim.api.nvim_create_augroup('mariasolos/cursor_highlights', { clear = false })
+    vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave' }, {
+      group = under_cursor_highlights_group,
+      desc = 'Highlight references under the cursor',
+      buffer = bufnr,
+      callback = vim.lsp.buf.document_highlight,
+    })
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'InsertEnter', 'BufLeave' }, {
+      group = under_cursor_highlights_group,
+      desc = 'Clear highlight references',
+      buffer = bufnr,
+      callback = vim.lsp.buf.clear_references,
+    })
+  end
+
+  if client:supports_method(methods.textDocument_inlayHint) then
+    keymap('<C-k>', function()
+      -- Close the completion menu first (if open).
+      local cmp = require 'cmp'
+      if cmp.visible() then
+        cmp.close()
+      end
+
+      vim.lsp.buf.signature_help()
+    end, 'Signature help', 'i')
+  end
+
+  if client:supports_method(methods.textDocument_documentHighlight) then
+    local under_cursor_highlights_group = vim.api.nvim_create_augroup('mariasolos/cursor_highlights', { clear = false })
+    vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave' }, {
+      group = under_cursor_highlights_group,
+      desc = 'Highlight references under the cursor',
+      buffer = bufnr,
+      callback = vim.lsp.buf.document_highlight,
+    })
+
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'InsertEnter', 'BufLeave' }, {
+      group = under_cursor_highlights_group,
+      desc = 'Clear highlight references',
+      buffer = bufnr,
+      callback = vim.lsp.buf.clear_references,
+    })
+  end
+
+  if client:supports_method(methods.textDocument_inlayHint) then
+    local inlay_hints_group = vim.api.nvim_create_augroup('toggle_inlay_hints', { clear = false })
+
+    -- Initial inlay hint display.
+    -- Idk why but without the delay inlay hints aren't displayed at the very start.
+    vim.defer_fn(function()
+      local mode = vim.api.nvim_get_mode().mode
+      vim.lsp.inlay_hint.enable(mode == 'n' or mode == 'v', { bufnr = bufnr })
+    end, 500)
+
+    vim.api.nvim_create_autocmd('InsertEnter', {
+      group = inlay_hints_group,
+      desc = 'Enable inlay hints',
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+      end,
+    })
+
+    vim.api.nvim_create_autocmd('InsertLeave', {
+      group = inlay_hints_group,
+      desc = 'Disable inlay hints',
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      end,
+    })
+  end
 end
 
 vim.api.nvim_create_autocmd('LspAttach', {
-    desc = 'Configure LSP keymaps',
-    callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
+  desc = 'Configure LSP keymaps',
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-        -- I don't think this can happen but it's a wild world out there.
-        if not client then
-            return
-        end
+    -- I don't think this can happen but it's a wild world out there.
+    if not client then
+      return
+    end
 
-        on_attach(client, args.buf)
-    end,
+    on_attach(client, args.buf)
+  end,
 })
 
 return {
@@ -117,11 +185,11 @@ return {
     dependencies = {
       'williamboman/mason-lspconfig.nvim',
       'jay-babu/mason-nvim-dap.nvim',
-      { 'rcarriga/nvim-dap-ui', dependencies = {"nvim-neotest/nvim-nio"} },
+      { 'rcarriga/nvim-dap-ui', dependencies = { 'nvim-neotest/nvim-nio' } },
       { 'j-hui/fidget.nvim', opts = {} },
       'hrsh7th/cmp-nvim-lsp',
       'williamboman/mason.nvim',
-      'mfussenegger/nvim-dap'
+      'mfussenegger/nvim-dap',
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -222,7 +290,7 @@ return {
           },
         },
         clangd = {
-            cmd = { 'clangd', '--offset-encoding=utf-16' },
+          cmd = { 'clangd', '--offset-encoding=utf-16' },
         },
         yamlls = {
           settings = {
@@ -245,7 +313,6 @@ return {
                 '!Not sequence',
                 '!Not',
                 '!Or sequence',
-
 
                 '!Or',
                 '!Ref scalar',
@@ -275,25 +342,25 @@ return {
       }
 
       require('mason').setup()
-      require('mason-nvim-dap').setup{
-          handlers = {}
+      require('mason-nvim-dap').setup {
+        handlers = {},
       }
 
-    local dap, dapui = require("dap"), require("dapui")
-    dapui.setup()
+      local dap, dapui = require 'dap', require 'dapui'
+      dapui.setup()
 
-    dap.listeners.before.attach.dapui_config = function()
-      dapui.open()
-    end
-    dap.listeners.before.launch.dapui_config = function()
-      dapui.open()
-    end
-    dap.listeners.before.event_terminated.dapui_config = function()
-      dapui.close()
-    end
-    dap.listeners.before.event_exited.dapui_config = function()
-      dapui.close()
-    end
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
