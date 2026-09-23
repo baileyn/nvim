@@ -35,15 +35,9 @@ return {
       -- Add more as you go, e.g.:
       -- javascript = { 'prettierd', 'prettier', stop_after_first = true },
     },
-    -- Pin stylua to the mason-managed binary. There is also an old
-    -- stylua 0.18.1 at ~/.cargo/bin that lacks the `--respect-ignores` flag
-    -- conform passes to modern stylua; if PATH order ever favored it,
-    -- formatting would fail. Referencing mason's binary directly avoids that.
-    formatters = {
-      stylua = {
-        command = vim.fn.stdpath 'data' .. '/mason/bin/stylua',
-      },
-    },
+    -- stylua is resolved from PATH (mason installs it and adds mason/bin to
+    -- Neovim's PATH). We don't pin an explicit path so this stays portable
+    -- across OSes (a hardcoded unix-style mason path breaks on Windows).
     -- Format on save, unless disabled globally or for the buffer.
     format_on_save = function(bufnr)
       if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
