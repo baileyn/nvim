@@ -1,92 +1,38 @@
+-- blink.cmp (saghen): fast, batteries-included completion engine.
+-- Chosen over nvim-cmp for speed (Rust fuzzy matcher) and simpler config.
+-- It also supplies the LSP `capabilities` consumed in lsp.lua.
+-- Docs: https://cmp.saghen.dev/
 return {
-  { 'L3MON4D3/LuaSnip' },
-  { 'petertriho/cmp-git', dependencies = { 'nvim-lua/plenary.nvim' } },
-  'hrsh7th/cmp-nvim-lua',
-  'hrsh7th/cmp-nvim-lsp',
-  'hrsh7th/cmp-buffer',
-  'hrsh7th/cmp-path',
-  'hrsh7th/cmp-cmdline',
-  'saadparwaiz1/cmp_luasnip',
-  'hrsh7th/cmp-nvim-lsp',
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = { 'L3MON4D3/LuaSnip', 'petertriho/cmp-git' },
-    config = function()
-      local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
-
-      local has_words_before = function()
-        unpack = unpack or table.unpack
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
-      end
-
-      cmp.setup {
-        snippet = {
-          expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert {
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm { select = true },
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-        },
-        sources = cmp.config.sources {
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'buffer' },
-          { name = 'orgmode' },
-        },
-      }
-
-      -- Set configuration for specific filetype.
-      cmp.setup.filetype('gitcommit', {
-        sources = cmp.config.sources {
-          { name = 'git' },
-          { name = 'buffer' },
-        },
-      })
-
-      -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-      cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = 'buffer' },
-        },
-      })
-
-      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-      cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources {
-          { name = 'path' },
-          { name = 'cmdline' },
-        },
-      })
-    end,
+  'saghen/blink.cmp',
+  -- Pin to a released 1.x tag so lazy fetches the matching prebuilt Rust
+  -- binary instead of a bleeding-edge `main` commit (a stale lock previously
+  -- forced `main`, which has no prebuilt binary -> `blink.lib` not found).
+  version = '1.*',
+  -- Belt-and-suspenders: if no prebuilt binary is available for this
+  -- platform/version, build the native fuzzy matcher from source. Requires
+  -- cargo (present on this machine).
+  build = 'cargo build --release',
+  event = 'InsertEnter',
+  dependencies = {
+    'rafamadriz/friendly-snippets',
   },
+  ---@module 'blink.cmp'
+  ---@type blink.cmp.Config
+  opts = {
+    keymap = {
+      preset = 'default',
+    },
+    appearance = {
+      nerd_font_variant = 'mono',
+    },
+    completion = {
+      documentation = { auto_show = true, auto_show_delay_ms = 200 },
+    },
+    sources = {
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
+    },
+    fuzzy = { implementation = 'prefer_rust_with_warning' },
+    signature = { enabled = true },
+  },
+  opts_extend = { 'sources.default' },
 }
